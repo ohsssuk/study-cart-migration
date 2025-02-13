@@ -5,14 +5,25 @@ import { useState } from "react";
 import style from "./ui.module.css";
 
 interface CheckboxProps {
-  label?: string;
   id: string;
+  label?: string;
+  width?: number;
+  checked?: boolean;
+  onChange?: (checked: boolean) => void;
 }
-export default function Checkbox({ label = "", id }: CheckboxProps) {
-  const [isChecked, setIsChecked] = useState(false);
+export default function Checkbox({
+  id,
+  label = "",
+  width = 20,
+  checked = false,
+  onChange = () => {},
+}: CheckboxProps) {
+  const [isChecked, setIsChecked] = useState(checked);
 
   const handleChange = () => {
-    setIsChecked((prevChecked) => !prevChecked);
+    const newChecked = !isChecked;
+    setIsChecked(newChecked);
+    onChange(newChecked);
   };
 
   return (
@@ -28,14 +39,16 @@ export default function Checkbox({ label = "", id }: CheckboxProps) {
         <Image
           src={
             isChecked
-              ? `${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/using_guide/ic-checkbox-checked.svg`
-              : `${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/using_guide/ic-checkbox.svg`
+              ? `${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/assets/mobile/img/using_guide/ic-checkbox-checked.svg`
+              : `${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/assets/mobile/img/using_guide/ic-checkbox.svg`
           }
           alt={isChecked ? "체크" : "체크 안함"}
-          width={20}
-          height={20}
+          width={width}
+          height={width}
         />
-        <span className={isChecked ? style.checked : ""}>{label}</span>
+        {label ? (
+          <span className={isChecked ? style.checked : ""}>{label}</span>
+        ) : null}
       </label>
     </div>
   );

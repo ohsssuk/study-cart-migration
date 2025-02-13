@@ -20,11 +20,8 @@
   cursor: pointer;
 }
 
-.checkbox_label img {
-  margin-right: 8px;
-}
-
 .checkbox_label span {
+  margin-left: 4px;
   font-size: 14px;
   color: #9d9995;
 }

@@ -12,7 +12,7 @@ export default function Layout({ children }: { children: ReactNode }) {
             <li>
               <Link href="">
                 <Image
-                  src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/using_guide/ic-24-arrow-perv.svg`}
+                  src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/assets/mobile/img/using_guide/ic-24-arrow-perv.svg`}
                   width={24}
                   height={24}
                   alt={"뒤로가기"}
@@ -25,7 +25,7 @@ export default function Layout({ children }: { children: ReactNode }) {
             <li>
               <Link href="/">
                 <Image
-                  src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/using_guide/ic-24-home.svg`}
+                  src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/assets/mobile/img/using_guide/ic-24-home.svg`}
                   width={24}
                   height={24}
                   alt={"홈"}
