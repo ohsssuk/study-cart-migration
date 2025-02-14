@@ -10,7 +10,9 @@ export default function Progress({ cost }: Props) {
   const MIN_COST_FOR_FREE_DELIVERY = 40000;
 
   const [progressText, setProgressText] = useState<ReactNode>(
-    <>0원만 더 담으면 일반배송 무료!</>
+    <>
+      <strong>{MIN_COST_FOR_FREE_DELIVERY}</strong>원만 더 담으면 일반배송 무료!
+    </>
   );
   const [progressBar, setProgressBar] = useState<number>(0);
 

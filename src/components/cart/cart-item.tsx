@@ -18,6 +18,7 @@ export default function CartItem({
     optionId,
     optionName,
     min,
+    current,
     max,
     price,
   }: OptionType) => {
@@ -39,7 +40,7 @@ export default function CartItem({
         </div>
 
         <div>
-          <NumberStepper defaultValue={min} min={min} max={max} />
+          <NumberStepper defaultValue={current} min={min} max={max} />
           <div className={style.price}>
             {new Intl.NumberFormat().format(price)}원
           </div>

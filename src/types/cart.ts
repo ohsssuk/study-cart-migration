@@ -4,6 +4,7 @@ export interface OptionType {
   price: number;
   min: number;
   max: number;
+  current: number;
 }
 
 export interface CartItemType {

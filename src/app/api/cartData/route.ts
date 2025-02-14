@@ -13,6 +13,7 @@ let cartData: CartItemType[] = [
         optionName: `원팩쿠캣 스지 수육전골 600g`,
         price: 10700,
         min: 1,
+        current: 1,
         max: 100,
       },
       {
@@ -20,6 +21,7 @@ let cartData: CartItemType[] = [
         optionName: `원팩쿠캣 스지 수육전골 600gX2개 (최소 2개 구매)`,
         price: 20200,
         min: 2,
+        current: 2,
         max: 100,
       },
     ],
@@ -35,6 +37,7 @@ let cartData: CartItemType[] = [
         optionName: `렌지쿠캣 오리지널 오븐 닭구이 200g`,
         price: 5900,
         min: 1,
+        current: 1,
         max: 100,
       },
       {
@@ -42,6 +45,7 @@ let cartData: CartItemType[] = [
         optionName: `렌지쿠캣 매콤 오븐 닭구이 200g (한개만 구매 가능)`,
         price: 5900,
         min: 1,
+        current: 1,
         max: 1,
       },
     ],
@@ -57,6 +61,7 @@ let cartData: CartItemType[] = [
         optionName: `양념 꼬막장 200g`,
         price: 9500,
         min: 1,
+        current: 1,
         max: 100,
       },
     ],
@@ -72,14 +77,35 @@ let cartData: CartItemType[] = [
         optionName: `1++ 한우 육사시미 150g (3개 구매 가능)`,
         price: 15900,
         min: 1,
+        current: 1,
         max: 3,
       },
     ],
   },
 ];
 
+function getTotalCost(cartData: CartItemType[]): number {
+  let total = 0;
+
+  cartData.forEach((product) => {
+    product.options.forEach((option) => {
+      total += option.price * option.current;
+    });
+  });
+
+  return total;
+}
+
 export async function GET() {
-  return NextResponse.json(cartData);
+  const totalCost = getTotalCost(cartData);
+
+  return NextResponse.json({
+    cartData,
+    cartCost: {
+      totalCost,
+      deiveryCost: totalCost > 40000 ? 4000 : 0,
+    },
+  });
 }
 
 export async function DELETE(req: Request) {
