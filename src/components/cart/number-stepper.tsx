@@ -41,7 +41,11 @@ export default function NumberStepper({
         disabled={count === min}
       >
         <Image
-          src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/assets/mobile/img/using_guide/ic-count-minus.svg`}
+          src={`${
+            process.env.NEXT_PUBLIC_IMAGE_BASE_PATH
+          }/assets/mobile/img/using_guide/${
+            count === min ? "ic-count-minus-disabled" : "ic-count-minus"
+          }.svg`}
           width={18}
           height={18}
           alt={"수량 감소"}
@@ -54,7 +58,11 @@ export default function NumberStepper({
         disabled={count === max}
       >
         <Image
-          src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/assets/mobile/img/using_guide/ic-count-plus.svg`}
+          src={`${
+            process.env.NEXT_PUBLIC_IMAGE_BASE_PATH
+          }/assets/mobile/img/using_guide/${
+            count === max ? "ic-count-plus-disabled" : "ic-count-plus"
+          }.svg`}
           width={18}
           height={18}
           alt={"수량 추가"}

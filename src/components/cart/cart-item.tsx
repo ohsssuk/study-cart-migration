@@ -3,7 +3,8 @@ import Checkbox from "../ui/checkbox";
 import style from "./cart-item.module.css";
 import Image from "next/image";
 import NumberStepper from "./number-stepper";
-import { CartItemType } from "@/types/cart";
+import { CartItemType, OptionType } from "@/types/cart";
+import { FC } from "react";
 
 export default function CartItem({
   productId,
@@ -11,7 +12,42 @@ export default function CartItem({
   productThumbnail,
   productStatus = 1,
   options,
-}: CartItemType) {
+  onRemoveOption,
+}: CartItemType & { onRemoveOption: (optionId: number) => void }) {
+  const Option: FC<OptionType> = ({
+    optionId,
+    optionName,
+    min,
+    max,
+    price,
+  }: OptionType) => {
+    return (
+      <div className={style.option}>
+        <div>
+          <div className={style.option_name}>{optionName}</div>
+          <button
+            className={style.remove}
+            onClick={() => onRemoveOption(optionId)}
+          >
+            <Image
+              width={12}
+              height={12}
+              src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/assets/mobile/img/using_guide/ic-24-close-bold.svg`}
+              alt={"삭제"}
+            />
+          </button>
+        </div>
+
+        <div>
+          <NumberStepper defaultValue={min} min={min} max={max} />
+          <div className={style.price}>
+            {new Intl.NumberFormat().format(price)}원
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className={style.product}>
       <div>
@@ -32,26 +68,7 @@ export default function CartItem({
 
         <div className={style.option_wrapper}>
           {options.map((option) => (
-            <div key={`option_${option.optionId}`} className={style.option}>
-              <div>
-                <div className={style.option_name}>양념 꼬막장 200g</div>
-                <button className={style.remove}>
-                  <Image
-                    width={12}
-                    height={12}
-                    src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/assets/mobile/img/using_guide/ic-24-close-bold.svg`}
-                    alt={"삭제"}
-                  />
-                </button>
-              </div>
-
-              <div>
-                <NumberStepper defaultValue={1} />
-                <div className={style.price}>
-                  {new Intl.NumberFormat().format(option.price)}원
-                </div>
-              </div>
-            </div>
+            <Option key={`option_${option.optionId}`} {...option} />
           ))}
         </div>
       </div>
