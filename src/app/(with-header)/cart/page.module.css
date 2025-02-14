@@ -1,3 +1,6 @@
-.cart_list_wrapper {
+#possible_purchase_products {
   padding: 10px 0 24px;
+}
+#best_products {
+  padding: 36px 0 24px;
 }

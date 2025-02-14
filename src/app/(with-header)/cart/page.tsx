@@ -1,43 +1,50 @@
-"use client";
-
 import Progress from "@/components/cart/progress";
 import style from "./page.module.css";
 import CartList from "@/components/cart/cart-list";
 import BlankLine from "@/components/ui/blank-line";
-import { useEffect, useState } from "react";
 import { CartItemType } from "@/types/cart";
+import ProductCarousel from "@/components/product/product-carousel";
 
-export default function Page() {
-  const [progressCost, setProgressCost] = useState<number>(0);
-  const [cartData, setCartData] = useState<CartItemType[]>([]);
+async function fetchCartData(): Promise<{
+  cartData: CartItemType[];
+  totalCost: number;
+}> {
+  const response = await fetch(`/api/cartData`, {
+    method: "GET",
+    cache: "force-cache",
+  });
 
-  const fetchCartData = async () => {
-    try {
-      const response = await fetch(`/api/cartData`, { method: "GET" });
+  if (!response.ok)
+    throw new Error("장바구니 데이터를 불러오는 데 실패했습니다.");
 
-      if (!response.ok) throw new Error("데이터를 불러오는데 실패했습니다.");
+  return response.json();
+}
 
-      const { cartCost, cartData } = await response.json();
-      const { totalCost } = cartCost;
+async function fetchBestProducts(): Promise<CartItemType[]> {
+  const response = await fetch(`/api/cartData`, {
+    method: "GET",
+    cache: "force-cache",
+  });
 
-      setProgressCost(totalCost);
-      setCartData(cartData);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  if (!response.ok) return [];
 
-  useEffect(() => {
-    fetchCartData();
-  }, []);
+  return response.json();
+}
+
+export default async function Page() {
+  const { cartData, cartCost } = await fetchCartData();
+  const bestProducts = await fetchBestProducts();
 
   return (
     <div>
-      <Progress cost={progressCost} />
-      <div className={style.cart_list_wrapper}>
-        <CartList cartData={cartData} onCartDataUpdate={fetchCartData} />
+      <Progress cost={cartCost.totalCost} />
+      <div id={style.possible_purchase_products}>
+        <CartList cartData={cartData} />
       </div>
       <BlankLine />
+      <div id={style.best_products}>
+        <ProductCarousel title={"실시간 베스트 상품"} products={bestProducts} />
+      </div>
     </div>
   );
 }
