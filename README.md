@@ -1,36 +1,21 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ✏️ 수정사항 메모
 
-## Getting Started
+## 1. CartList 컴포넌트 데이터 처리 방식 변경
+- 기존: `CartList`에서 직접 `fetch`
+- 수정: **상위 컴포넌트에서 데이터를 받아 `props`로 전달**
 
-First, run the development server:
+### 이유
+  1. **구매 불가 상품 리스트 필요** → 동일한 UI지만 **데이터가 다름**
+  2. **상위 페이지의 프로그레스바** → **카트 데이터 필요**
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 2. 페이지 렌더링 방식 변경 (CSR → SSG)
+- 기존: 유저 인터랙션(옵션 삭제, 상품 삭제 등)이 필요하여 **클라이언트 컴포넌트** 구성
+- 수정: **정적 사이트 생성(SSG) 방식으로 변경**
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 이유
+  1. **추천 상품 목록** →  변동이 거의 없고 **매번 fetch하는 것이 비효율적**
+  2. **카트 목록** → 유저 인터랙션이 있지 않는 이상 실시간 fetch가 필요하지 않아 **정적 렌더링 적합**
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
