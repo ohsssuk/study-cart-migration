@@ -1,5 +1,8 @@
 .cart_list > ul {
   padding: 0 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .select_manage {

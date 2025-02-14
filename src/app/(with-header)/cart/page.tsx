@@ -6,7 +6,9 @@ export default function Page() {
   return (
     <div>
       <Progress cost={5000} />
-      <CartList />
+      <div className={style.cart_list_wrapper}>
+        <CartList />
+      </div>
     </div>
   );
 }

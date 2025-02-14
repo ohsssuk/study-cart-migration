@@ -1,8 +1,19 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  logging: {
+    fetches: {
+      fullUrl: true,
+    },
+  },
   images: {
-    domains: ["crcf.cookatmarket.com"], // 외부 이미지 도메인 추가
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "crcf.cookatmarket.com",
+        pathname: "/product/images/**",
+      },
+    ],
   },
 };
 

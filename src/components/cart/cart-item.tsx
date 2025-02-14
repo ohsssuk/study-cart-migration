@@ -3,12 +3,19 @@ import Checkbox from "../ui/checkbox";
 import style from "./cart-item.module.css";
 import Image from "next/image";
 import NumberStepper from "./number-stepper";
+import { CartItemType } from "@/types/cart";
 
-export default function CartItem() {
+export default function CartItem({
+  productId,
+  productName,
+  productThumbnail,
+  productStatus = 1,
+  options,
+}: CartItemType) {
   return (
     <div className={style.product}>
       <div>
-        <Checkbox id="25" />
+        <Checkbox id={`check_${productId}`} />
       </div>
 
       <div className={style.inner}>
@@ -17,31 +24,35 @@ export default function CartItem() {
             className={style.product_thumbnail}
             width={64}
             height={64}
-            src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/product/images/2024/10/xifi_1728290388_2661_120.jpg`}
-            alt={"바로쿠캣 밥도둑 5종 (깐새우장/양념꼬막장/순살게장)"}
+            src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}${productThumbnail}`}
+            alt={productName}
           />
-          <p className={style.product_name}>
-            바로쿠캣 밥도둑 5종 (깐새우장/양념꼬막장/순살게장)
-          </p>
+          <p className={style.product_name}>{productName}</p>
         </Link>
 
-        <div className={style.option}>
-          <div>
-            <div className={style.option_name}>양념 꼬막장 200g</div>
-            <button className={style.remove}>
-              <Image
-                width={12}
-                height={12}
-                src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/assets/mobile/img/using_guide/ic-24-close-bold.svg`}
-                alt={"삭제"}
-              />
-            </button>
-          </div>
+        <div className={style.option_wrapper}>
+          {options.map((option) => (
+            <div key={`option_${option.optionId}`} className={style.option}>
+              <div>
+                <div className={style.option_name}>양념 꼬막장 200g</div>
+                <button className={style.remove}>
+                  <Image
+                    width={12}
+                    height={12}
+                    src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/assets/mobile/img/using_guide/ic-24-close-bold.svg`}
+                    alt={"삭제"}
+                  />
+                </button>
+              </div>
 
-          <div>
-            <NumberStepper />
-            <div className={style.price}>9,500원</div>
-          </div>
+              <div>
+                <NumberStepper defaultValue={1} />
+                <div className={style.price}>
+                  {new Intl.NumberFormat().format(option.price)}원
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
