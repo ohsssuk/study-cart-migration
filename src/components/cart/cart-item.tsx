@@ -10,10 +10,8 @@ export default function CartItem({
   productId,
   productName,
   productThumbnail,
-  productStatus = 1,
   options,
-  onRemoveOption,
-}: CartItemType & { onRemoveOption: (optionId: number) => void }) {
+}: CartItemType) {
   const Option: FC<OptionType> = ({
     optionId,
     optionName,
@@ -22,13 +20,21 @@ export default function CartItem({
     max,
     price,
   }: OptionType) => {
+    // 옵션 삭제 처리 함수
+    const handleRemoveOption = async (optionId: OptionType["optionId"]) => {
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/cartData`, {
+        method: "DELETE",
+        body: JSON.stringify({ optionIds: [optionId] }),
+      });
+    };
+
     return (
       <div className={style.option}>
         <div>
           <div className={style.option_name}>{optionName}</div>
           <button
             className={style.remove}
-            onClick={() => onRemoveOption(optionId)}
+            onClick={() => handleRemoveOption(optionId)}
           >
             <Image
               width={12}

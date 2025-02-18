@@ -1,13 +1,14 @@
 import { CartItemType } from "@/types/cart";
 import { NextResponse } from "next/server";
 import { initCartList } from "../data";
+import { revalidateTag } from "next/cache";
 
-let cartData = [...initCartList];
+let cartList = [...initCartList];
 
-function getTotalCost(cartData: CartItemType[]): number {
+function getTotalCost(cartList: CartItemType[]): number {
   let total = 0;
 
-  cartData.forEach((product) => {
+  cartList.forEach((product) => {
     product.options.forEach((option) => {
       total += option.price * option.current;
     });
@@ -17,10 +18,10 @@ function getTotalCost(cartData: CartItemType[]): number {
 }
 
 export async function GET() {
-  const totalCost = getTotalCost(cartData);
+  const totalCost = getTotalCost(cartList);
 
   return NextResponse.json({
-    cartData,
+    cartList,
     cartCost: {
       totalCost,
       deiveryCost: totalCost > 40000 ? 4000 : 0,
@@ -35,7 +36,7 @@ export async function DELETE(req: Request) {
 
     if (optionIds && optionIds.length > 0) {
       // 옵션 삭제 처리
-      cartData = cartData
+      cartList = cartList
         .map((product) => {
           product.options = product.options.filter(
             (option) => !optionIds.includes(option.optionId)
@@ -51,19 +52,23 @@ export async function DELETE(req: Request) {
         })
         .filter((product) => product !== null);
 
+      revalidateTag(`cartData-customerId`);
+
       return NextResponse.json({
         message: "옵션이 삭제되었습니다.",
         deletedProductIds,
       });
     } else if (productIds && productIds.length > 0) {
       // 상품 삭제 처리
-      cartData = cartData.filter((product) => {
+      cartList = cartList.filter((product) => {
         if (productIds.includes(product.productId)) {
           deletedProductIds.push(product.productId); // 삭제된 상품 ID 기록
           return false; // 해당 상품 삭제
         }
         return true; // 해당 상품 유지
       });
+
+      revalidateTag(`cartData-customerId`);
 
       return NextResponse.json({
         message: "상품이 삭제되었습니다.",

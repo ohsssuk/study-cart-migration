@@ -4,3 +4,8 @@
 #best_products {
   padding: 36px 0 24px;
 }
+#cart_information {
+  padding: 24px 18px;
+  background: #ededed;
+  margin-top: 100px;
+}

@@ -5,6 +5,7 @@ export interface OptionType {
   min: number;
   max: number;
   current: number;
+  discountRate?: number;
 }
 
 export interface CartItemType {
@@ -13,4 +14,9 @@ export interface CartItemType {
   productThumbnail: string;
   productStatus: number;
   options: OptionType[];
+}
+
+export interface CartCostType {
+  totalCost: number;
+  deiveryCost: number;
 }

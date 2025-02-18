@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import style from "./number-stepper.module.css";
 import { useState } from "react";
