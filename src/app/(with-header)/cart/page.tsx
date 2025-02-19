@@ -49,20 +49,14 @@ export default async function Page() {
   async function PurchasePossibleCartList() {
     const { cartList } = await fetchCartData();
 
-    return (
-      <div id={style.possible_purchase_products}>
-        <CartList cartList={cartList} />
-      </div>
-    );
+    return <CartList cartList={cartList} />;
   }
 
   async function RecommendedBestProducts() {
     const bestProducts = await fetchBestProducts();
 
     return (
-      <div id={style.best_products}>
-        <ProductCarousel title={"실시간 베스트 상품"} products={bestProducts} />
-      </div>
+      <ProductCarousel title={"실시간 베스트 상품"} products={bestProducts} />
     );
   }
 
@@ -72,15 +66,19 @@ export default async function Page() {
         <CartProgressForDeliveryCostCheck />
       </Suspense>
 
-      <Suspense fallback={<>dd</>}>
-        <PurchasePossibleCartList />
-      </Suspense>
+      <div id={style.possible_purchase_products}>
+        <Suspense fallback={<>dd</>}>
+          <PurchasePossibleCartList />
+        </Suspense>
+      </div>
 
       <BlankLine />
 
-      <Suspense fallback={<>실시간 베스트 상품 로딩중</>}>
-        <RecommendedBestProducts />
-      </Suspense>
+      <div id={style.best_products}>
+        <Suspense fallback={<ProductCarousel title={"실시간 베스트 상품"} />}>
+          <RecommendedBestProducts />
+        </Suspense>
+      </div>
 
       <div id={style.cart_information}>
         <Information

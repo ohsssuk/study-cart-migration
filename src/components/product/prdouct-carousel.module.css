@@ -5,17 +5,16 @@
   line-height: 1;
   padding: 0 18px;
 }
-.swiper {
+.list {
   display: flex;
-  gap: 12px;
-  overflow-x: scroll;
-  padding-bottom: 20px;
-  scroll-snap-type: x mandatory;
+  padding: 0 18px !important;
 }
 .slide {
-  flex: 0 0 auto;
-  width: calc(33.33% - 12px);
-  scroll-snap-align: start;
+  width: 34% !important;
+  margin-left: 12px;
+}
+.slide:first-of-type {
+  margin-left: 0;
 }
 .item {
   display: flex;
@@ -29,6 +28,15 @@
   position: relative;
   width: 100%;
   aspect-ratio: 1;
+}
+.item .skeleton_head {
+  width: 100%;
+  aspect-ratio: 1;
+}
+.item .skeleton_body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 .thumbnail {
   width: 100%;

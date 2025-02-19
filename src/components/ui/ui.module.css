@@ -62,3 +62,20 @@ ul.information_list > li::before {
   content: "・";
   text-align: center;
 }
+
+.skeleton {
+  background-color: #f0f0f0;
+  animation: pulse 1.5s infinite ease-in-out;
+  border-radius: 4px;
+}
+@keyframes pulse {
+  0% {
+    background-color: #f0f0f0;
+  }
+  50% {
+    background-color: #e0e0e0;
+  }
+  100% {
+    background-color: #f0f0f0;
+  }
+}

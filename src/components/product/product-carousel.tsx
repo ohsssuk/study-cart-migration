@@ -7,36 +7,24 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 import style from "./prdouct-carousel.module.css";
 import "swiper/css";
-import { useEffect, useState } from "react";
+import Skeleton from "../ui/skeleton";
 
 interface ProductCarouselProps {
   title: string;
-  products: CartItemType[];
+  products?: CartItemType[];
 }
 
 export default function ProductCarousel({
   title,
-  products,
+  products = [],
 }: ProductCarouselProps) {
-  const [swiperInitialized, setSwiperInitialized] = useState(false);
-
-  useEffect(() => {
-    setSwiperInitialized(true);
-  }, []);
-
   return (
     <div className={style.container}>
       <p className={style.title}>{title}</p>
-      {swiperInitialized ? (
-        <Swiper
-          spaceBetween={12}
-          slidesPerView={3.7}
-          slidesOffsetBefore={18}
-          slidesOffsetAfter={18}
-          className={style.swiper}
-        >
+      {products.length > 0 ? (
+        <Swiper slidesPerView={"auto"} className={style.list}>
           {products.map((product, index) => (
-            <SwiperSlide key={`carousel_item_${index}`}>
+            <SwiperSlide key={`carousel_item_${index}`} className={style.slide}>
               <div className={style.item}>
                 <div className={style.head}>
                   <Link href="">
@@ -77,7 +65,26 @@ export default function ProductCarousel({
             </SwiperSlide>
           ))}
         </Swiper>
-      ) : null}
+      ) : (
+        <Swiper slidesPerView={"auto"} className={style.list}>
+          {Array.from({ length: 3 }).map((_, index) => (
+            <SwiperSlide
+              key={`carousel_skeleton_item_${index}`}
+              className={style.slide}
+            >
+              <div className={style.item}>
+                <div className={style.skeleton_head}>
+                  <Skeleton />
+                </div>
+                <div className={style.skeleton_body}>
+                  <Skeleton height="32px" />
+                  <Skeleton height="16px" />
+                </div>
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      )}
     </div>
   );
 }
