@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import Checkbox from "../ui/checkbox";
 import style from "./cart-item.module.css";
@@ -5,6 +7,7 @@ import Image from "next/image";
 import NumberStepper from "./number-stepper";
 import { CartItemType, OptionType } from "@/types/cart";
 import { FC } from "react";
+import { useRouter } from "next/navigation";
 
 export default function CartItem({
   productId,
@@ -20,12 +23,15 @@ export default function CartItem({
     max,
     price,
   }: OptionType) => {
+    const router = useRouter();
+
     // 옵션 삭제 처리 함수
     const handleRemoveOption = async (optionId: OptionType["optionId"]) => {
       await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/cartData`, {
         method: "DELETE",
         body: JSON.stringify({ optionIds: [optionId] }),
       });
+      router.refresh();
     };
 
     return (

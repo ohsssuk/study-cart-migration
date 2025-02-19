@@ -4,9 +4,9 @@ import { ReactNode, useEffect, useState } from "react";
 import style from "./progress.module.css";
 
 interface Props {
-  cost: number;
+  cost?: number;
 }
-export default function Progress({ cost }: Props) {
+export default function Progress({ cost = 0 }: Props) {
   const MIN_COST_FOR_FREE_DELIVERY = 40000;
 
   const [progressText, setProgressText] = useState<ReactNode>(

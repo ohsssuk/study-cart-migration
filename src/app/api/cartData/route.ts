@@ -1,7 +1,7 @@
 import { CartItemType } from "@/types/cart";
 import { NextResponse } from "next/server";
 import { initCartList } from "../data";
-import { revalidateTag } from "next/cache";
+import { delay } from "@/util/common";
 
 let cartList = [...initCartList];
 
@@ -19,6 +19,8 @@ function getTotalCost(cartList: CartItemType[]): number {
 
 export async function GET() {
   const totalCost = getTotalCost(cartList);
+
+  await delay(2000);
 
   return NextResponse.json({
     cartList,
@@ -52,8 +54,6 @@ export async function DELETE(req: Request) {
         })
         .filter((product) => product !== null);
 
-      revalidateTag(`cartData-customerId`);
-
       return NextResponse.json({
         message: "옵션이 삭제되었습니다.",
         deletedProductIds,
@@ -67,8 +67,6 @@ export async function DELETE(req: Request) {
         }
         return true; // 해당 상품 유지
       });
-
-      revalidateTag(`cartData-customerId`);
 
       return NextResponse.json({
         message: "상품이 삭제되었습니다.",
