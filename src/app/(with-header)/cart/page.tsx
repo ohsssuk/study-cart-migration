@@ -6,6 +6,7 @@ import { CartCostType, CartItemType } from "@/types/cart";
 import ProductCarousel from "@/components/product/product-carousel";
 import Information from "@/components/ui/information";
 import { Suspense } from "react";
+import CartListSkeleton from "@/components/cart/cart-list-skeleton";
 
 async function fetchCartData(): Promise<{
   cartList: CartItemType[];
@@ -15,12 +16,11 @@ async function fetchCartData(): Promise<{
     `${process.env.NEXT_PUBLIC_API_URL}/api/cartData`,
     {
       method: "GET",
-      cache: "no-cache",
+      cache: "no-store",
     }
   );
 
-  if (!response.ok)
-    throw new Error("장바구니 데이터를 불러오는 데 실패했습니다.");
+  if (!response.ok) throw new Error("카트 데이터를 불러오는 데 실패했습니다.");
 
   return response.json();
 }
@@ -30,7 +30,7 @@ async function fetchBestProducts(): Promise<CartItemType[]> {
     `${process.env.NEXT_PUBLIC_API_URL}/api/bestProductsDataNow`,
     {
       method: "GET",
-      cache: "force-cache",
+      cache: "no-store",
     }
   );
 
@@ -67,7 +67,7 @@ export default async function Page() {
       </Suspense>
 
       <div id={style.possible_purchase_products}>
-        <Suspense fallback={<>dd</>}>
+        <Suspense fallback={<CartListSkeleton />}>
           <PurchasePossibleCartList />
         </Suspense>
       </div>
@@ -79,6 +79,8 @@ export default async function Page() {
           <RecommendedBestProducts />
         </Suspense>
       </div>
+
+      <BlankLine />
 
       <div id={style.cart_information}>
         <Information

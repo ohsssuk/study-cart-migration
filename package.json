@@ -12,9 +12,11 @@
     "@fontsource/pretendard": "^5.1.0",
     "next": "15.1.7",
     "normalize.css": "^8.0.1",
+    "persist": "^0.2.7",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "swiper": "^11.2.4"
+    "swiper": "^11.2.4",
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

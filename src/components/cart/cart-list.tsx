@@ -12,16 +12,14 @@ export default function CartList({ cartList }: { cartList: CartItemType[] }) {
         <Checkbox
           id="check_all"
           label="전체 선택"
+          checked={true}
           onChange={(isChecked) => console.log(isChecked)}
         />
         <button className={style.select_delete}>선택삭제</button>
       </div>
       <ul>
         {cartList.map((cartItem, index) => (
-          <li
-            className={style[`cart_item_${index}`]}
-            key={`cart-item-${index}`}
-          >
+          <li key={`cart-item-${index}`}>
             <CartItem {...cartItem} />
           </li>
         ))}

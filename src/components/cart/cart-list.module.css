@@ -17,3 +17,27 @@
   font-size: 12px;
   text-decoration: underline;
 }
+
+.skeleton_item {
+  border: 1px solid #ededed;
+  background: #fff;
+  padding: 16px 16px 16px 46px;
+  border-radius: 8px;
+  background: #fff;
+}
+.skeleton_head {
+  display: flex;
+  gap: 8px;
+}
+.skeleton_head > div:nth-of-type(1) {
+  width: 64px;
+  height: 64px;
+}
+.skeleton_head > div:nth-of-type(2) {
+  flex-grow: 1;
+  height: 18px;
+}
+.skeleton_body {
+  height: 96px;
+  margin-top: 14px;
+}
