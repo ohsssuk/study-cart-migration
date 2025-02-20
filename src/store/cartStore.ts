@@ -1,21 +1,44 @@
+import { CartItemType } from "@/types/cart";
 import { create } from "zustand";
 
+interface CheckListType {
+  productId: number;
+  isChecked: boolean;
+}
+
 interface CartStore {
-  selectedItems: Set<number>;
-  toggleItem: (id: number) => void;
-  selectAll: (isChecked: boolean, ids: number[]) => void;
+  checkList: CheckListType[];
+  check: (productId: number) => void;
+  checkAll: (isChecked: boolean) => void;
 }
 
 export const useCartStore = create<CartStore>((set) => ({
-  selectedItems: new Set(),
+  checkList: [],
 
-  toggleItem: (id) =>
-    set((state) => {
-      const newSet = new Set(state.selectedItems);
-      newSet.has(id) ? newSet.delete(id) : newSet.add(id);
-      return { selectedItems: newSet };
+  init: (cartList: CartItemType[]) =>
+    set({
+      checkList: cartList.map((item) => ({
+        productId: item.productId,
+        isChecked: true,
+      })),
     }),
 
-  selectAll: (isChecked, ids) =>
-    set({ selectedItems: isChecked ? new Set(ids) : new Set() }),
+  check: (productId) =>
+    set((state) => {
+      const newCheckList = state.checkList.map((item) =>
+        item.productId === productId
+          ? { ...item, isChecked: !item.isChecked }
+          : item
+      );
+      return { checkList: newCheckList };
+    }),
+
+  checkAll: (isChecked) =>
+    set((state) => {
+      const newCheckList = state.checkList.map((item) => ({
+        ...item,
+        isChecked,
+      }));
+      return { checkList: newCheckList };
+    }),
 }));

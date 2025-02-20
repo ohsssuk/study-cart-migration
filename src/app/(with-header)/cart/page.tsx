@@ -7,6 +7,7 @@ import ProductCarousel from "@/components/product/product-carousel";
 import Information from "@/components/ui/information";
 import { Suspense } from "react";
 import CartListSkeleton from "@/components/cart/cart-list-skeleton";
+import { useCartStore } from "@/store/cartStore";
 
 async function fetchCartData(): Promise<{
   cartList: CartItemType[];

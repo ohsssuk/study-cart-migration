@@ -12,7 +12,7 @@ export default function CartList({ cartList }: { cartList: CartItemType[] }) {
         <Checkbox
           id="check_all"
           label="전체 선택"
-          checked={true}
+          isChecked={true}
           onChange={(isChecked) => console.log(isChecked)}
         />
         <button className={style.select_delete}>선택삭제</button>

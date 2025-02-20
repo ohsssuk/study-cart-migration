@@ -1,29 +1,24 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
 import style from "./ui.module.css";
 
 interface CheckboxProps {
   id: string;
   label?: string;
   width?: number;
-  checked?: boolean;
+  isChecked?: boolean;
   onChange?: (checked: boolean) => void;
 }
 export default function Checkbox({
   id,
   label = "",
   width = 20,
-  checked = false,
+  isChecked = false,
   onChange = () => {},
 }: CheckboxProps) {
-  const [isChecked, setIsChecked] = useState(checked);
-
   const handleChange = () => {
-    const newChecked = !isChecked;
-    setIsChecked(newChecked);
-    onChange(newChecked);
+    onChange(!isChecked);
   };
 
   return (

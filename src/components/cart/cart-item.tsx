@@ -8,6 +8,7 @@ import NumberStepper from "./number-stepper";
 import { CartItemType, OptionType } from "@/types/cart";
 import { FC } from "react";
 import { useRouter } from "next/navigation";
+import { useCartStore } from "@/store/cartStore";
 
 export default function CartItem({
   productId,
@@ -61,10 +62,30 @@ export default function CartItem({
     );
   };
 
+  const { checkList, check } = useCartStore();
+
+  const isChecked = (productId: number): boolean => {
+    return checkList.some(
+      (item) => item.productId === productId && item.isChecked
+    );
+  };
+
+  const handleChange = (productId: number) => {
+    console.log(checkList, productId);
+    check(productId);
+    console.log(checkList, productId);
+  };
+
   return (
     <div className={style.product}>
       <div>
-        <Checkbox id={`check_${productId}`} />
+        <Checkbox
+          id={`check_${productId}`}
+          onChange={() => {
+            handleChange(productId);
+          }}
+          isChecked={isChecked(productId)}
+        />
       </div>
 
       <div className={style.inner}>
