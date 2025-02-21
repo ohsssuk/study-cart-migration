@@ -29,10 +29,8 @@ export async function GET(
   { params }: { params: { customerId: string } }
 ) {
   const { customerId } = await params;
-  console.log(customerId);
 
   const cartList = getCustomerCartListFromDatabase(customerId);
-  console.log(cartList);
   const totalCost = getTotalCost(cartList);
 
   await delay(1000);
@@ -75,7 +73,6 @@ export async function DELETE(
         .filter((product) => product.options.length > 0); // 옵션이 없는 상품은 삭제
 
       cartDatabase[customerId] = updatedCartList;
-      console.log(cartDatabase[customerId]);
 
       return NextResponse.json({
         message: "옵션이 삭제되었습니다.",

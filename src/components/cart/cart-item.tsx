@@ -28,7 +28,7 @@ export default function CartItem({
 
     // 옵션 삭제 처리 함수
     const handleRemoveOption = async (optionId: OptionType["optionId"]) => {
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/cartData/${"1"}`, {
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/cartData`, {
         method: "DELETE",
         body: JSON.stringify({ optionIds: [optionId] }),
       });

@@ -7,13 +7,15 @@ import Information from "@/components/ui/information";
 import { Suspense } from "react";
 import CartListSkeleton from "@/components/cart/cart-list-skeleton";
 import PurchasePossibleCartList from "./purchase-possible-cart-list";
+import { cookies } from "next/headers";
+import { randomUUID } from "crypto";
 
-async function fetchCartData(): Promise<{
+async function fetchCartData(customerId: string): Promise<{
   cartList: CartItemType[];
   cartCost: CartCostType;
 }> {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/cartData/${"2"}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/cartData/${customerId}`,
     {
       method: "GET",
       cache: "no-store",
@@ -38,12 +40,37 @@ async function fetchBestProducts(): Promise<CartItemType[]> {
 
   return response.json();
 }
+async function setCustomerId() {
+  "use server";
+  const cookieStore = await cookies();
+  const customerId = randomUUID();
+
+  // 쿠키 설정
+  cookieStore.set("customerId", customerId, {
+    maxAge: 60 * 60,
+    path: "/",
+  });
+
+  return customerId;
+}
 
 export default async function Page() {
+  let customerId = (await cookies()).get("customerId")?.value;
+
+  if (!customerId) {
+    customerId = await setCustomerId();
+  }
+
   async function CartProgressForDeliveryCostCheck() {
-    const { cartCost } = await fetchCartData();
+    const { cartCost } = await fetchCartData(customerId);
 
     return <Progress cost={cartCost.totalCost} />;
+  }
+
+  async function PurchasePossibleCartListWrap() {
+    const { cartList } = await fetchCartData(customerId);
+
+    return <PurchasePossibleCartList cartList={cartList} />;
   }
 
   async function RecommendedBestProducts() {
@@ -52,12 +79,6 @@ export default async function Page() {
     return (
       <ProductCarousel title={"실시간 베스트 상품"} products={bestProducts} />
     );
-  }
-
-  async function PurchasePossibleCartListWrap() {
-    const { cartList } = await fetchCartData();
-
-    return <PurchasePossibleCartList cartList={cartList} />;
   }
 
   return (
