@@ -28,7 +28,7 @@ export default function CartItem({
 
     // 옵션 삭제 처리 함수
     const handleRemoveOption = async (optionId: OptionType["optionId"]) => {
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/cartData`, {
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/cartData/${"1"}`, {
         method: "DELETE",
         body: JSON.stringify({ optionIds: [optionId] }),
       });
@@ -70,10 +70,8 @@ export default function CartItem({
     );
   };
 
-  const handleChange = (productId: number) => {
-    console.log(checkList, productId);
+  const handleCheckCart = (productId: number) => {
     check(productId);
-    console.log(checkList, productId);
   };
 
   return (
@@ -82,7 +80,7 @@ export default function CartItem({
         <Checkbox
           id={`check_${productId}`}
           onChange={() => {
-            handleChange(productId);
+            handleCheckCart(productId);
           }}
           isChecked={isChecked(productId)}
         />

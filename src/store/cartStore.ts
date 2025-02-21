@@ -8,14 +8,16 @@ interface CheckListType {
 
 interface CartStore {
   checkList: CheckListType[];
+  setCheckList: (cartList: CartItemType[]) => void;
   check: (productId: number) => void;
   checkAll: (isChecked: boolean) => void;
+  isCheckedAll: () => boolean;
 }
 
-export const useCartStore = create<CartStore>((set) => ({
+export const useCartStore = create<CartStore>((set, get) => ({
   checkList: [],
 
-  init: (cartList: CartItemType[]) =>
+  setCheckList: (cartList: CartItemType[]) =>
     set({
       checkList: cartList.map((item) => ({
         productId: item.productId,
@@ -41,4 +43,9 @@ export const useCartStore = create<CartStore>((set) => ({
       }));
       return { checkList: newCheckList };
     }),
+
+  isCheckedAll: () => {
+    const { checkList } = get();
+    return checkList.length > 0 && checkList.every((item) => item.isChecked);
+  },
 }));

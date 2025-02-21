@@ -1,20 +1,19 @@
 import Progress from "@/components/cart/progress";
 import style from "./page.module.css";
-import CartList from "@/components/cart/cart-list";
 import BlankLine from "@/components/ui/blank-line";
 import { CartCostType, CartItemType } from "@/types/cart";
 import ProductCarousel from "@/components/product/product-carousel";
 import Information from "@/components/ui/information";
 import { Suspense } from "react";
 import CartListSkeleton from "@/components/cart/cart-list-skeleton";
-import { useCartStore } from "@/store/cartStore";
+import PurchasePossibleCartList from "./purchase-possible-cart-list";
 
 async function fetchCartData(): Promise<{
   cartList: CartItemType[];
   cartCost: CartCostType;
 }> {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/cartData`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/cartData/${"2"}`,
     {
       method: "GET",
       cache: "no-store",
@@ -47,18 +46,18 @@ export default async function Page() {
     return <Progress cost={cartCost.totalCost} />;
   }
 
-  async function PurchasePossibleCartList() {
-    const { cartList } = await fetchCartData();
-
-    return <CartList cartList={cartList} />;
-  }
-
   async function RecommendedBestProducts() {
     const bestProducts = await fetchBestProducts();
 
     return (
       <ProductCarousel title={"실시간 베스트 상품"} products={bestProducts} />
     );
+  }
+
+  async function PurchasePossibleCartListWrap() {
+    const { cartList } = await fetchCartData();
+
+    return <PurchasePossibleCartList cartList={cartList} />;
   }
 
   return (
@@ -69,7 +68,7 @@ export default async function Page() {
 
       <div id={style.possible_purchase_products}>
         <Suspense fallback={<CartListSkeleton />}>
-          <PurchasePossibleCartList />
+          <PurchasePossibleCartListWrap />
         </Suspense>
       </div>
 

@@ -1,9 +1,9 @@
 import { CartItemType } from "@/types/cart";
 import { NextResponse } from "next/server";
-import { initCartList } from "../data";
+import { initCartList } from "../../data";
 import { delay } from "@/util/common";
 
-let cartList = [...initCartList];
+const cartDatabase: Record<string, CartItemType[]> = {};
 
 function getTotalCost(cartList: CartItemType[]): number {
   let total = 0;
@@ -17,10 +17,25 @@ function getTotalCost(cartList: CartItemType[]): number {
   return total;
 }
 
-export async function GET() {
+function getCustomerCartListFromDatabase(customerId: string): CartItemType[] {
+  if (!cartDatabase[customerId]) {
+    cartDatabase[customerId] = [...initCartList];
+  }
+  return cartDatabase[customerId];
+}
+
+export async function GET(
+  req: Request,
+  { params }: { params: { customerId: string } }
+) {
+  const { customerId } = await params;
+  console.log(customerId);
+
+  const cartList = getCustomerCartListFromDatabase(customerId);
+  console.log(cartList);
   const totalCost = getTotalCost(cartList);
 
-  await delay(2000);
+  await delay(1000);
 
   return NextResponse.json({
     cartList,
@@ -31,28 +46,36 @@ export async function GET() {
   });
 }
 
-export async function DELETE(req: Request) {
+export async function DELETE(
+  req: Request,
+  { params }: { params: { customerId: string } }
+) {
   try {
+    const { customerId } = await params;
     const { optionIds, productIds } = await req.json();
+
+    const cartList = getCustomerCartListFromDatabase(customerId);
     const deletedProductIds: number[] = [];
 
     if (optionIds && optionIds.length > 0) {
       // 옵션 삭제 처리
-      cartList = cartList
+      const updatedCartList = cartList
         .map((product) => {
-          product.options = product.options.filter(
+          // 옵션 필터링
+          const updatedOptions = product.options.filter(
             (option) => !optionIds.includes(option.optionId)
           );
 
-          // 옵션이 모두 삭제되었을 경우 해당 상품 삭제
-          if (product.options.length === 0) {
+          if (updatedOptions.length === 0) {
             deletedProductIds.push(product.productId);
-            return null;
           }
 
-          return product;
+          return { ...product, options: updatedOptions };
         })
-        .filter((product) => product !== null);
+        .filter((product) => product.options.length > 0); // 옵션이 없는 상품은 삭제
+
+      cartDatabase[customerId] = updatedCartList;
+      console.log(cartDatabase[customerId]);
 
       return NextResponse.json({
         message: "옵션이 삭제되었습니다.",
@@ -60,13 +83,15 @@ export async function DELETE(req: Request) {
       });
     } else if (productIds && productIds.length > 0) {
       // 상품 삭제 처리
-      cartList = cartList.filter((product) => {
+      const updatedCartList = cartList.filter((product) => {
         if (productIds.includes(product.productId)) {
           deletedProductIds.push(product.productId); // 삭제된 상품 ID 기록
           return false; // 해당 상품 삭제
         }
         return true; // 해당 상품 유지
       });
+
+      cartDatabase[customerId] = updatedCartList;
 
       return NextResponse.json({
         message: "상품이 삭제되었습니다.",
