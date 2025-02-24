@@ -1,7 +1,6 @@
 import { CartItemType } from "@/types/cart";
 import { NextResponse } from "next/server";
 import { initCartList } from "../../data";
-import { delay } from "@/util/common";
 
 const cartDatabase: Record<string, CartItemType[]> = {};
 
@@ -32,8 +31,6 @@ export async function GET(
 
   const cartList = getCustomerCartListFromDatabase(customerId);
   const totalCost = getTotalCost(cartList);
-
-  await delay(1000);
 
   return NextResponse.json({
     cartList,

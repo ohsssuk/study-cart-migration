@@ -41,3 +41,25 @@
   height: 96px;
   margin-top: 14px;
 }
+
+.empty {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.empty > img {
+  margin-bottom: 12px;
+  width: 270px;
+}
+.empty > p {
+  font-size: 14px;
+  line-height: 20px;
+  color: #bbb8b5;
+}
+
+.empty .test_helper {
+  font-size: 14px;
+  color: #ff5833;
+  margin-top: 20px;
+}

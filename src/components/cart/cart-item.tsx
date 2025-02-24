@@ -7,7 +7,6 @@ import Image from "next/image";
 import NumberStepper from "./number-stepper";
 import { CartItemType, OptionType } from "@/types/cart";
 import { FC } from "react";
-import { useRouter } from "next/navigation";
 import { useCartStore } from "@/store/cartStore";
 import { getCustomerId } from "@/util/common";
 
@@ -25,7 +24,7 @@ export default function CartItem({
     max,
     price,
   }: OptionType) => {
-    const router = useRouter();
+    const { fetchCartData } = useCartStore();
 
     // 옵션 삭제 처리 함수
     const handleRemoveOption = async (optionId: OptionType["optionId"]) => {
@@ -36,7 +35,8 @@ export default function CartItem({
           body: JSON.stringify({ optionIds: [optionId] }),
         }
       );
-      router.refresh();
+
+      fetchCartData();
     };
 
     return (

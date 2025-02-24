@@ -8,7 +8,7 @@ interface CheckListType {
 }
 
 interface CartStore {
-  cartList: CartItemType[];
+  cartList: CartItemType[] | null;
   cartCost: CartCostType;
   checkList: CheckListType[];
   fetchCartData: () => void;
@@ -20,7 +20,7 @@ interface CartStore {
 
 export const useCartStore = create<CartStore>((set, get) => ({
   checkList: [],
-  cartList: [],
+  cartList: null,
   cartCost: {
     totalCost: 0,
     deiveryCost: 0,

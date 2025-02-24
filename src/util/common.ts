@@ -5,7 +5,7 @@ export function delay(ms: number): Promise<void> {
 }
 
 export function getCustomerId() {
-  const cookieName = "study-next-customer-id";
+  const cookieName = "customer-id";
 
   let customerId = Cookies.get(cookieName);
 
