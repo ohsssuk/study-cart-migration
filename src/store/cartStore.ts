@@ -1,4 +1,5 @@
-import { CartItemType } from "@/types/cart";
+import { CartCostType, CartItemType } from "@/types/cart";
+import { getCustomerId } from "@/util/common";
 import { create } from "zustand";
 
 interface CheckListType {
@@ -7,7 +8,10 @@ interface CheckListType {
 }
 
 interface CartStore {
+  cartList: CartItemType[];
+  cartCost: CartCostType;
   checkList: CheckListType[];
+  fetchCartData: () => void;
   setCheckList: (cartList: CartItemType[]) => void;
   check: (productId: number) => void;
   checkAll: (isChecked: boolean) => void;
@@ -16,6 +20,30 @@ interface CartStore {
 
 export const useCartStore = create<CartStore>((set, get) => ({
   checkList: [],
+  cartList: [],
+  cartCost: {
+    totalCost: 0,
+    deiveryCost: 0,
+  },
+
+  fetchCartData: async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/cartData/${getCustomerId()}`,
+        {
+          method: "GET",
+          cache: "no-store",
+        }
+      );
+
+      if (response.ok) {
+        const { cartList, cartCost } = await response.json();
+        set({ cartList, cartCost });
+      }
+    } catch (error) {
+      console.error("카트 데이터를 불러오는 데 실패했습니다.", error);
+    }
+  },
 
   setCheckList: (cartList: CartItemType[]) =>
     set({

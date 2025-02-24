@@ -4,7 +4,9 @@ import style from "./cart-list.module.css";
 export default function CartListSkeleton() {
   return (
     <div className={style.cart_list}>
-      <div className={style.select_manage}></div>
+      <div className={style.select_manage}>
+        <Skeleton height="20px" />
+      </div>
       <ul>
         <li>
           <div className={style.skeleton_item}>
