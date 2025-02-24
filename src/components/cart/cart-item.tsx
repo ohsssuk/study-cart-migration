@@ -39,6 +39,28 @@ export default function CartItem({
       fetchCartData();
     };
 
+    const handleOptionCount = async (
+      count: number,
+      optionId: OptionType["optionId"]
+    ) => {
+      console.log(count, optionId);
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/cartData/${getCustomerId()}`,
+          {
+            method: "POST",
+            body: JSON.stringify({ optionId, count }),
+          }
+        );
+
+        if (response.ok) {
+          fetchCartData();
+        }
+      } catch (error) {
+        console.error("Error in handleOptionCount:", error);
+      }
+    };
+
     return (
       <div className={style.option}>
         <div>
@@ -57,7 +79,12 @@ export default function CartItem({
         </div>
 
         <div>
-          <NumberStepper defaultValue={current} min={min} max={max} />
+          <NumberStepper
+            defaultValue={current}
+            min={min}
+            max={max}
+            onChange={(count) => handleOptionCount(count, optionId)}
+          />
           <div className={style.price}>
             {new Intl.NumberFormat().format(price)}원
           </div>

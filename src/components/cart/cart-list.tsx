@@ -6,7 +6,6 @@ import CartItem from "./cart-item";
 import style from "./cart-list.module.css";
 import { CartItemType } from "@/types/cart";
 import Image from "next/image";
-import Link from "next/link";
 
 export default function CartList({ cartList }: { cartList: CartItemType[] }) {
   const { isCheckedAll, checkAll } = useCartStore();

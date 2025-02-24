@@ -14,7 +14,7 @@ interface NumberStepperProps {
 export default function NumberStepper({
   defaultValue = 1,
   min = 1,
-  max = 1000,
+  max = 10000,
   onChange = () => {},
 }: NumberStepperProps) {
   const [count, setCount] = useState(defaultValue);
@@ -46,7 +46,7 @@ export default function NumberStepper({
           src={`${
             process.env.NEXT_PUBLIC_IMAGE_BASE_PATH
           }/assets/mobile/img/using_guide/${
-            count === min ? "ic-count-minus-disabled" : "ic-count-minus"
+            count <= min ? "ic-count-minus-disabled" : "ic-count-minus"
           }.svg`}
           width={18}
           height={18}
@@ -63,7 +63,7 @@ export default function NumberStepper({
           src={`${
             process.env.NEXT_PUBLIC_IMAGE_BASE_PATH
           }/assets/mobile/img/using_guide/${
-            count === max ? "ic-count-plus-disabled" : "ic-count-plus"
+            count >= max ? "ic-count-plus-disabled" : "ic-count-plus"
           }.svg`}
           width={18}
           height={18}
