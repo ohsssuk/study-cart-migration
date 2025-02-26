@@ -9,22 +9,13 @@ import Checkbox from "@/components/ui/checkbox";
 import { getCustomerId } from "@/util/common";
 
 export default function PurchasePossibleCartList() {
-  const { setCheckList, checkList, fetchCartData, cartList, cartCost } =
-    useCartStore();
-
-  useEffect(() => {
-    if (cartList === null) {
-      return;
-    }
-
-    setCheckList(cartList);
-  }, [cartList, setCheckList]);
+  const { checkList, fetchCartData, cartList, getCartCost } = useCartStore();
 
   useEffect(() => {
     fetchCartData();
   }, [fetchCartData]);
 
-  const { isCheckedAll, checkAll } = useCartStore();
+  const { getIsCheckedAll, checkAll } = useCartStore();
 
   const handleCheckCartAll = (status: boolean) => {
     checkAll(status);
@@ -64,7 +55,7 @@ export default function PurchasePossibleCartList() {
 
   return (
     <>
-      <Progress cost={cartCost.totalCost} />
+      <Progress cost={getCartCost().totalCost} />
       <div id={style.possible_purchase_products}>
         <CheckManageSection />
         <CartList cartList={cartList} />
@@ -78,7 +69,7 @@ export default function PurchasePossibleCartList() {
         <Checkbox
           id="check_all"
           label="전체 선택"
-          isChecked={isCheckedAll()}
+          isChecked={getIsCheckedAll()}
           onChange={(status) => handleCheckCartAll(status)}
         />
         <button onClick={deleteChekedProduct} className={style.select_delete}>

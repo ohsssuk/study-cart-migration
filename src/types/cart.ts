@@ -18,5 +18,5 @@ export interface CartItemType {
 
 export interface CartCostType {
   totalCost: number;
-  deiveryCost: number;
+  deliveryCost: number;
 }

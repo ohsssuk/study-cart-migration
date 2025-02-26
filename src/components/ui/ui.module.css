@@ -79,3 +79,16 @@ ul.information_list > li::before {
     background-color: #f0f0f0;
   }
 }
+
+.button {
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  font-size: 15px;
+  background-color: #ff5833;
+  color: #fff;
+  font-weight: 700;
+  font-family: "Pretendard";
+}

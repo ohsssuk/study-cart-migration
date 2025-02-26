@@ -5,6 +5,7 @@ import ProductCarousel from "@/components/product/product-carousel";
 import Information from "@/components/ui/information";
 import { Suspense } from "react";
 import PurchasePossibleCartList from "./purchase-possible-cart-list";
+import CartReceipt from "./cart-receipt";
 
 async function fetchBestProducts(): Promise<CartItemType[]> {
   const response = await fetch(
@@ -42,6 +43,8 @@ export default async function Page() {
       </div>
 
       <BlankLine />
+
+      <CartReceipt />
 
       <div id={style.cart_information}>
         <Information

@@ -4,18 +4,6 @@ import { initCartList } from "../../data";
 
 const cartDatabase: Record<string, CartItemType[]> = {};
 
-function getTotalCost(cartList: CartItemType[]): number {
-  let total = 0;
-
-  cartList.forEach((product) => {
-    product.options.forEach((option) => {
-      total += option.price * option.current;
-    });
-  });
-
-  return total;
-}
-
 function getCustomerCartListFromDatabase(customerId: string): CartItemType[] {
   if (!cartDatabase[customerId]) {
     cartDatabase[customerId] = [...initCartList];
@@ -50,14 +38,9 @@ export async function GET(
   const { customerId } = await params;
 
   const cartList = getCustomerCartListFromDatabase(customerId);
-  const totalCost = getTotalCost(cartList);
 
   return NextResponse.json({
     cartList,
-    cartCost: {
-      totalCost,
-      deiveryCost: totalCost > 40000 ? 4000 : 0,
-    },
   });
 }
 
