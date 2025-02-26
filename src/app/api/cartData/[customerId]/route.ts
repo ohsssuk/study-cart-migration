@@ -45,7 +45,7 @@ function mergeOptions(existingOptions: OptionType[], newOptions: OptionType[]) {
 
 export async function GET(
   req: Request,
-  { params }: { params: { customerId: string } }
+  { params }: { params: Promise<{ customerId: string }> }
 ) {
   const { customerId } = await params;
 
@@ -63,7 +63,7 @@ export async function GET(
 
 export async function POST(
   req: Request,
-  { params }: { params: { customerId: string } }
+  { params }: { params: Promise<{ customerId: string }> }
 ) {
   try {
     const { customerId } = await params;
@@ -129,7 +129,7 @@ export async function POST(
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { customerId: string } }
+  { params }: { params: Promise<{ customerId: string }> }
 ) {
   try {
     const { customerId } = await params;
