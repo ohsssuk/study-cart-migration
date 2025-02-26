@@ -6,7 +6,6 @@ import style from "./cart-item.module.css";
 import Image from "next/image";
 import NumberStepper from "./number-stepper";
 import { CartItemType, OptionType } from "@/types/cart";
-import { FC } from "react";
 import { useCartStore } from "@/store/cartStore";
 import { getCustomerId } from "@/util/common";
 
@@ -16,83 +15,6 @@ export default function CartItem({
   productThumbnail,
   options,
 }: CartItemType) {
-  const Option: FC<OptionType> = ({
-    optionId,
-    optionName,
-    min,
-    current,
-    max,
-    price,
-  }: OptionType) => {
-    const { fetchCartData } = useCartStore();
-
-    // 옵션 삭제 처리 함수
-    const handleRemoveOption = async (optionId: OptionType["optionId"]) => {
-      await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/cartData/${getCustomerId()}`,
-        {
-          method: "DELETE",
-          body: JSON.stringify({ optionIds: [optionId] }),
-        }
-      );
-
-      fetchCartData();
-    };
-
-    const handleOptionCount = async (
-      count: number,
-      optionId: OptionType["optionId"]
-    ) => {
-      console.log(count, optionId);
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/cartData/${getCustomerId()}`,
-          {
-            method: "POST",
-            body: JSON.stringify({ optionId, count }),
-          }
-        );
-
-        if (response.ok) {
-          fetchCartData();
-        }
-      } catch (error) {
-        console.error("Error in handleOptionCount:", error);
-      }
-    };
-
-    return (
-      <div className={style.option}>
-        <div>
-          <div className={style.option_name}>{optionName}</div>
-          <button
-            className={style.remove}
-            onClick={() => handleRemoveOption(optionId)}
-          >
-            <Image
-              width={12}
-              height={12}
-              src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/assets/mobile/img/using_guide/ic-24-close-bold.svg`}
-              alt={"삭제"}
-            />
-          </button>
-        </div>
-
-        <div>
-          <NumberStepper
-            defaultValue={current}
-            min={min}
-            max={max}
-            onChange={(count) => handleOptionCount(count, optionId)}
-          />
-          <div className={style.price}>
-            {new Intl.NumberFormat().format(price)}원
-          </div>
-        </div>
-      </div>
-    );
-  };
-
   const { checkList, check } = useCartStore();
 
   const isChecked = (productId: number): boolean => {
@@ -133,6 +55,82 @@ export default function CartItem({
           {options.map((option) => (
             <Option key={`option_${option.optionId}`} {...option} />
           ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Option({
+  optionId,
+  optionName,
+  min,
+  current,
+  max,
+  price,
+}: OptionType) {
+  const { fetchCartData } = useCartStore();
+
+  // 옵션 삭제 처리 함수
+  const handleRemoveOption = async (optionId: OptionType["optionId"]) => {
+    await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/cartData/${getCustomerId()}`,
+      {
+        method: "DELETE",
+        body: JSON.stringify({ optionIds: [optionId] }),
+      }
+    );
+
+    fetchCartData();
+  };
+
+  const handleOptionCount = async (
+    count: number,
+    optionId: OptionType["optionId"]
+  ) => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/cartData/${getCustomerId()}`,
+        {
+          method: "POST",
+          body: JSON.stringify({ optionId, count }),
+        }
+      );
+
+      if (response.ok) {
+        fetchCartData();
+      }
+    } catch (error) {
+      console.error("Error in handleOptionCount:", error);
+    }
+  };
+
+  return (
+    <div className={style.option}>
+      <div>
+        <div className={style.option_name}>{optionName}</div>
+        <button
+          className={style.remove}
+          onClick={() => handleRemoveOption(optionId)}
+        >
+          <Image
+            width={12}
+            height={12}
+            src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/assets/mobile/img/using_guide/ic-24-close-bold.svg`}
+            alt={"삭제"}
+          />
+        </button>
+      </div>
+
+      <div>
+        <NumberStepper
+          defaultValue={current}
+          min={min}
+          max={max}
+          onChange={(count) => handleOptionCount(count, optionId)}
+        />
+        <div className={style.price}>
+          {new Intl.NumberFormat().format(current * price)}원
         </div>
       </div>
     </div>

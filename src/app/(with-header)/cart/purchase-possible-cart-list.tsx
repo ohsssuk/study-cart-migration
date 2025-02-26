@@ -2,13 +2,15 @@
 
 import Progress from "@/components/cart/progress";
 import { useCartStore } from "@/store/cartStore";
-import CartListSkeleton from "@/components/cart/cart-list-skeleton";
 import { useEffect } from "react";
 import style from "./page.module.css";
 import CartList from "@/components/cart/cart-list";
+import Checkbox from "@/components/ui/checkbox";
+import { getCustomerId } from "@/util/common";
 
 export default function PurchasePossibleCartList() {
-  const { setCheckList, fetchCartData, cartList, cartCost } = useCartStore();
+  const { setCheckList, checkList, fetchCartData, cartList, cartCost } =
+    useCartStore();
 
   useEffect(() => {
     if (cartList === null) {
@@ -22,16 +24,67 @@ export default function PurchasePossibleCartList() {
     fetchCartData();
   }, [fetchCartData]);
 
+  const { isCheckedAll, checkAll } = useCartStore();
+
+  const handleCheckCartAll = (status: boolean) => {
+    checkAll(status);
+  };
+
+  const deleteChekedProduct = async () => {
+    const checkedProductIds = checkList
+      .filter((item) => item.isChecked)
+      .map((item) => item.productId);
+
+    if (checkedProductIds.length === 0) {
+      alert("삭제할 상품을 선택해주세요.");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/cartData/${getCustomerId()}`,
+        {
+          method: "DELETE",
+          body: JSON.stringify({ productIds: checkedProductIds }),
+        }
+      );
+
+      if (!response.ok) {
+        const result = await response.json();
+        throw new Error(result.message || "상품 삭제에 실패했습니다.");
+      }
+
+      fetchCartData();
+    } catch (error) {
+      console.error("상품 삭제 오류:", error);
+    }
+
+    fetchCartData();
+  };
+
   return (
     <>
       <Progress cost={cartCost.totalCost} />
       <div id={style.possible_purchase_products}>
-        {cartList === null ? (
-          <CartListSkeleton />
-        ) : (
-          <CartList cartList={cartList} />
-        )}
+        <CheckManageSection />
+        <CartList cartList={cartList} />
       </div>
     </>
   );
+
+  function CheckManageSection() {
+    return (
+      <section className={style.select_manage}>
+        <Checkbox
+          id="check_all"
+          label="전체 선택"
+          isChecked={isCheckedAll()}
+          onChange={(status) => handleCheckCartAll(status)}
+        />
+        <button onClick={deleteChekedProduct} className={style.select_delete}>
+          선택삭제
+        </button>
+      </section>
+    );
+  }
 }

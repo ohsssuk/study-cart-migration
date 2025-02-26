@@ -1,31 +1,21 @@
 "use client";
 
-import { useCartStore } from "@/store/cartStore";
-import Checkbox from "../ui/checkbox";
 import CartItem from "./cart-item";
+import CartListSkeleton from "./cart-list-skeleton";
 import style from "./cart-list.module.css";
 import { CartItemType } from "@/types/cart";
 import Image from "next/image";
 
-export default function CartList({ cartList }: { cartList: CartItemType[] }) {
-  const { isCheckedAll, checkAll } = useCartStore();
-
-  const handleCheckCartAll = (status: boolean) => {
-    checkAll(status);
-  };
-
+export default function CartList({
+  cartList,
+}: {
+  cartList: CartItemType[] | null;
+}) {
   return (
     <div className={style.cart_list}>
-      <div className={style.select_manage}>
-        <Checkbox
-          id="check_all"
-          label="전체 선택"
-          isChecked={isCheckedAll()}
-          onChange={(status) => handleCheckCartAll(status)}
-        />
-        <button className={style.select_delete}>선택삭제</button>
-      </div>
-      {cartList.length > 0 ? (
+      {cartList === null ? (
+        <CartListSkeleton />
+      ) : cartList.length > 0 ? (
         <ul>
           {cartList.map((cartItem, index) => (
             <li key={`cart-item-${index}`}>
