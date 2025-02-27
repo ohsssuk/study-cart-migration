@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import style from "./progress.module.css";
 
 interface Props {
@@ -8,6 +8,7 @@ interface Props {
 }
 export default function Progress({ cost = 0 }: Props) {
   const MIN_COST_FOR_FREE_DELIVERY = 40000;
+  const progressRef = useRef<HTMLDivElement | null>(null);
 
   const [progressText, setProgressText] = useState<ReactNode>(
     <>
@@ -15,6 +16,20 @@ export default function Progress({ cost = 0 }: Props) {
     </>
   );
   const [progressBar, setProgressBar] = useState<number>(0);
+  const [isSticky, setIsSticky] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (progressRef.current) {
+        const { top } = progressRef.current.getBoundingClientRect();
+        console.log(top);
+        setIsSticky(top <= 60);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     const remainingCost = MIN_COST_FOR_FREE_DELIVERY - cost;
@@ -36,8 +51,8 @@ export default function Progress({ cost = 0 }: Props) {
   }, [cost]);
 
   return (
-    <div className={style.progress_wrap}>
-      <div className={style.progress}>
+    <div ref={progressRef} className={style.progress_wrap}>
+      <div className={`${style.progress} ${isSticky ? style.fixed : ""}`}>
         <p>{progressText}</p>
         <div className={style.bar}>
           <div

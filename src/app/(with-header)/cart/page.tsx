@@ -32,6 +32,13 @@ export default async function Page() {
 
   return (
     <div>
+      <div className={style.delivery_wrap}>
+        <div className={style.delivery}>
+          <div className={style.receiver}>집 / 테스트</div>
+          <div className={style.place}>[13595] 경기 성남시 분당구</div>
+        </div>
+      </div>
+
       <PurchasePossibleCartList />
 
       <BlankLine />

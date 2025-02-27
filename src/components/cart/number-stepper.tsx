@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import style from "./number-stepper.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface NumberStepperProps {
   defaultValue?: number;
@@ -18,6 +18,10 @@ export default function NumberStepper({
   onChange = () => {},
 }: NumberStepperProps) {
   const [count, setCount] = useState(defaultValue);
+
+  useEffect(() => {
+    setCount(defaultValue);
+  }, [defaultValue]);
 
   const handleDecrease = () => {
     if (count > min) {

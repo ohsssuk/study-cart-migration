@@ -72,3 +72,27 @@
 .receipt_total > div:nth-of-type(2) {
   color: #ff5833;
 }
+
+.delivery_wrap {
+  padding: 0 18px;
+}
+.delivery {
+  border: 1px solid #e9e8e2;
+  border-radius: 8px;
+  background: #f9f9f9
+    url(https://crcf.cookatmarket.com/assets/mobile/img/using_guide/ic-16-next-gray.svg)
+    no-repeat center right 14px / 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.delivery .receiver {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 700;
+}
+.delivery .place {
+  font-size: 13px;
+  line-height: 18px;
+}

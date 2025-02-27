@@ -4,6 +4,16 @@
 .progress {
   padding: 20px 18px 10px;
   background: #fff;
+  z-index: 10;
+  width: 100%;
+  max-width: 500px;
+}
+.progress.fixed {
+  position: fixed;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-bottom: 1px solid #e9e8e2;
 }
 .progress .bar {
   position: relative;
