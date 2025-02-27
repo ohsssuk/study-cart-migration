@@ -69,7 +69,6 @@ function Option({
   max,
   price,
 }: OptionType) {
-  console.log(current);
   const { fetchCartData } = useCartStore();
 
   // 옵션 삭제 처리 함수

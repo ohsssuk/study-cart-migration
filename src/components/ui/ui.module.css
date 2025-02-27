@@ -92,3 +92,10 @@ ul.information_list > li::before {
   font-weight: 700;
   font-family: "Pretendard";
 }
+
+.sticky {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  max-width: 500px;
+}

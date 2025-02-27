@@ -22,7 +22,6 @@ export default function Progress({ cost = 0 }: Props) {
     const handleScroll = () => {
       if (progressRef.current) {
         const { top } = progressRef.current.getBoundingClientRect();
-        console.log(top);
         setIsSticky(top <= 60);
       }
     };
