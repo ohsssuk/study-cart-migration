@@ -105,6 +105,8 @@ function Option({
     }
   };
 
+  const priceFormatter = new Intl.NumberFormat("ko-KR");
+
   return (
     <div className={style.option}>
       <div>
@@ -130,7 +132,7 @@ function Option({
           onChange={(count) => handleOptionCount(count, optionId)}
         />
         <div className={style.price}>
-          {new Intl.NumberFormat().format(current * price)}원
+          {priceFormatter.format(current * price)}원
         </div>
       </div>
     </div>
