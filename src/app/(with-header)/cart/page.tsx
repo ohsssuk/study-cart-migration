@@ -2,11 +2,10 @@ import style from "./page.module.css";
 import BlankLine from "@/components/ui/blank-line";
 import { CartItemType } from "@/types/cart";
 import ProductCarousel from "@/components/product/product-carousel";
-import Information from "@/components/ui/information";
 import { Suspense } from "react";
 import PurchasePossibleCartList from "./purchase-possible-cart-list";
 import CartReceipt from "./cart-receipt";
-import StickyDynamic from "@/components/ui/sticky-dynamic";
+import CartInformation from "./cart-Infromation";
 
 async function fetchBestProducts(): Promise<CartItemType[]> {
   const response = await fetch(
@@ -56,17 +55,7 @@ export default async function Page() {
 
       <CartReceipt />
 
-      <StickyDynamic resizeTargetSelector={"#PurchasePossibleCartList"}>
-        <div id={style.cart_information}>
-          <Information
-            contents={[
-              `카트에 최대 100개의 상품(옵션 기준)을 담을 수 있습니다.`,
-              `카트에 담긴 상품은 최대 90일 동안 보관됩니다.`,
-              `관심상품으로 등록하면 더 오래 보관할 수 있어요.`,
-            ]}
-          />
-        </div>
-      </StickyDynamic>
+      <CartInformation />
     </>
   );
 }

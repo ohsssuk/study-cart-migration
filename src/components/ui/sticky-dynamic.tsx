@@ -5,31 +5,27 @@ import style from "./ui.module.css";
 
 interface StickyDynamicProps {
   children: ReactNode;
-  resizeTargetSelector: string;
+  reRender?: boolean;
 }
 export default function StickyDynamic({
   children,
-  resizeTargetSelector,
+  reRender = true,
 }: StickyDynamicProps) {
   const originPositionRef = useRef<HTMLDivElement | null>(null);
   const contentRef = useRef<HTMLDivElement | null>(null);
-  const [isSticky, setIsSticky] = useState(false);
+  const [isSticky, setIsSticky] = useState(true);
 
   useEffect(() => {
     const originPosition = originPositionRef.current;
     const content = contentRef.current;
+
     if (!originPosition || !content) return;
 
-    const resizeTarget = document.querySelector(
-      resizeTargetSelector
-    ) as HTMLElement;
-    if (!resizeTarget) return;
-
     const rePosition = () => {
-      const { top } = originPosition.getBoundingClientRect();
-      const contentHeight = content.clientHeight;
+      const { top: originTop } = originPosition.getBoundingClientRect();
+      const { height: contentHeight } = content.getBoundingClientRect();
 
-      if (top + contentHeight < window.innerHeight) {
+      if (originTop < window.innerHeight - contentHeight) {
         setIsSticky(true);
       } else {
         setIsSticky(false);
@@ -37,14 +33,7 @@ export default function StickyDynamic({
     };
 
     rePosition();
-
-    const resizeObserver = new ResizeObserver(rePosition);
-
-    resizeObserver.observe(resizeTarget);
-    return () => {
-      resizeObserver.disconnect();
-    };
-  }, [resizeTargetSelector]);
+  }, [reRender]);
 
   return (
     <>
