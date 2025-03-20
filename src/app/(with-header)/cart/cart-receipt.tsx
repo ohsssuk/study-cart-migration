@@ -12,6 +12,16 @@ export default function CartReceipt() {
 
   const priceFormatter = new Intl.NumberFormat("ko-KR");
 
+  const handelPurchase = () => {
+    alert(
+      `주문 기능은 아직 사용할 수 없습니다. 총 금액: ${priceFormatter.format(
+        totalCost
+      )}, 총 배송비: ${priceFormatter.format(
+        deliveryCost
+      )}, 건 수: ${checkedCount}`
+    );
+  };
+
   return (
     <section className={style.receipt}>
       <ul className={style.receipt_detail}>
@@ -38,7 +48,9 @@ export default function CartReceipt() {
       </div>
 
       <div className={style.purchase_btn_wrap}>
-        <Button>{checkedCount > 0 ? `${checkedCount}건 ` : ""}주문하기</Button>
+        <Button onCick={handelPurchase}>
+          {checkedCount > 0 ? `${checkedCount}건 ` : ""}주문하기
+        </Button>
       </div>
     </section>
   );
